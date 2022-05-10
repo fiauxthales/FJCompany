@@ -2,8 +2,8 @@
 const express = require("express");
 const cors = require("cors");
 
-const UsersRoutes = require('./src/Modules/Users/users-routes');
-const SessionRoutes = require('./src/Modules/Session/session-routes');
+const UsersRoutes = require("./src/Modules/Users/users-routes");
+const SessionRoutes = require("./src/Modules/Session/session-routes");
 
 // Inicialização express
 const app = express();
@@ -18,8 +18,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
-app.use('/', [UsersRoutes, SessionRoutes]);
+app.use("/", [UsersRoutes, SessionRoutes]);
 
 app.listen(8686, () => {
   console.log("Servidor rodando na porta 8686");

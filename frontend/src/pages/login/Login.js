@@ -57,26 +57,28 @@ const Login = () => {
         message: "Sua senha deve possuir no mínimo 6 caracteres",
         variant: "error",
       });
-    }
-    try {
-      const request = {
-        cpf: 51103282000,
-        password: values.password,
-      };
-      const { data } = await api.post("/session", request);
-      setSessao({
-        ...sessao,
-        cpf: values.cpf,
-        funcao: data.funcao,
-        activeSession: true,
-        token: data.user_token,
-      });
-      navigate("/app", { replace: true });
-    } catch {
-      setAlert({
-        message: "erro",
-        variant: "error",
-      });
+    } else {
+      try {
+        const request = {
+          cpf: values.cpf.replace(/[^\d]+/g, ""),
+          password: values.password,
+        };
+        console.log(request);
+        const { data } = await api.post("/session", request);
+        setSessao({
+          ...sessao,
+          cpf: values.cpf,
+          funcao: data.funcao,
+          activeSession: true,
+          token: data.user_token,
+        });
+        navigate("/app", { replace: true });
+      } catch {
+        setAlert({
+          message: "Erro ao conectar com o servidor",
+          variant: "error",
+        });
+      }
     }
   };
 
@@ -110,9 +112,9 @@ const Login = () => {
           </CpfMask>
         </FormControl>
         <FormControl sx={{ m: 1, width: "330px" }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Senha</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password-login">Senha</InputLabel>
           <OutlinedInput
-            id="outlined-adornment-password"
+            id="outlined-adornment-password-login"
             type={values.showPassword ? "text" : "password"}
             value={values.password}
             onChange={handleChange("password")}
@@ -148,7 +150,7 @@ const Login = () => {
           }}
         >
           <Typography variant="caption">Não tem conta?</Typography>
-          <Link href="#">Cadastre-se</Link>
+          <Link href="/SignUp">Cadastre-se</Link>
         </Box>
         <Snackbar
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}

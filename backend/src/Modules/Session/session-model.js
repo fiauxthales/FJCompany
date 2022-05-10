@@ -14,8 +14,8 @@ class SessionModel {
         const error = { status: 3, erro: "Usuário desabilitado" };
         return error;
       }
-      //const isValid = await compare(password, user.senha);
-      const isValid = Boolean(password === user.senha);
+      const isValid = await compare(password, user.senha);
+      //const isValid = Boolean(password === user.senha);
       if (!isValid) {
         const error = { status: 4, erro: "senha inválida" };
         return error;

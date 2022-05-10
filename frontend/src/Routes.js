@@ -4,10 +4,11 @@ import { SessionContext } from "./context/sessionContext";
 import NotFoundView from "./pages/errors/NotFoundView";
 import Login from "./pages/login/Login";
 import MensagemAleatoria from "./pages/mensagemAleatoria/MensagemAleatoria";
+import Signup from "./pages/signup/Signup";
 
 // ----------------------------------------------------------------------
 
-export default function App() {
+export default function AppRoutes() {
   const { sessao } = useContext(SessionContext);
   return (
     <Routes>
@@ -31,7 +32,8 @@ export default function App() {
           )
         }
       />
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={sessao.activeSession? <MensagemAleatoria/> : <Login />} />
+      <Route path="/signup" element={sessao.activeSession? <MensagemAleatoria/> : <Signup />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>
   );
