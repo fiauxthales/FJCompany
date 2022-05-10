@@ -9,6 +9,7 @@ export function SessionProvider({ children }) {
     token: "",
     funcao: "",
     activeSession: false,
+    numeroMensagens: 0
   });
 
   return (

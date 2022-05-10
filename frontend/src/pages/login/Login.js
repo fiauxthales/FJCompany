@@ -63,7 +63,6 @@ const Login = () => {
           cpf: values.cpf.replace(/[^\d]+/g, ""),
           password: values.password,
         };
-        console.log(request);
         const { data } = await api.post("/session", request);
         setSessao({
           ...sessao,
