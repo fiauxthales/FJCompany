@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Typography, Box } from "@mui/material";
 
-const NotFoundView = () => {
+const AdminView = () => {
   return (
     <Box
       sx={{
@@ -24,7 +24,7 @@ const NotFoundView = () => {
         variant="h4"
         sx={{ marginBottom: "30px" }}
       >
-        Página não encontrada
+        Admin
       </Typography>
       <Button>
         <Link to="/app">Ir Para Home</Link>
@@ -33,4 +33,4 @@ const NotFoundView = () => {
   );
 };
 
-export default NotFoundView;
+export default AdminView;

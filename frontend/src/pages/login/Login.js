@@ -64,14 +64,22 @@ const Login = () => {
           password: values.password,
         };
         const { data } = await api.post("/session", request);
-        setSessao({
-          ...sessao,
-          cpf: values.cpf,
-          funcao: data.funcao,
-          activeSession: true,
-          token: data.user_token,
-        });
-        navigate("/app", { replace: true });
+        console.log(data);
+        if (data.status === 1) {
+          setSessao({
+            ...sessao,
+            cpf: values.cpf,
+            funcao: data.funcao,
+            activeSession: true,
+            token: data.user_token,
+          });
+          navigate("/app", { replace: true });
+        } else {
+          setAlert({
+            message: data.erro,
+            variant: "error",
+          });
+        }
       } catch {
         setAlert({
           message: "Erro ao conectar com o servidor",
@@ -111,7 +119,9 @@ const Login = () => {
           </CpfMask>
         </FormControl>
         <FormControl sx={{ m: 1, width: "330px" }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password-login">Senha</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password-login">
+            Senha
+          </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password-login"
             type={values.showPassword ? "text" : "password"}

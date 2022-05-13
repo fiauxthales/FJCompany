@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { SessionContext } from "./context/sessionContext";
+import AdminView from "./pages/admin/AdminView";
 import NotFoundView from "./pages/errors/NotFoundView";
 import Login from "./pages/login/Login";
 import MensagemAleatoria from "./pages/mensagemAleatoria/MensagemAleatoria";
@@ -26,7 +27,7 @@ export default function AppRoutes() {
         path="/app"
         element={
           sessao.activeSession ? (
-            <MensagemAleatoria />
+            (sessao.funcao === "admnistrador") ? (<AdminView/>) : (<MensagemAleatoria />)
           ) : (
             <Navigate to="/login" />
           )

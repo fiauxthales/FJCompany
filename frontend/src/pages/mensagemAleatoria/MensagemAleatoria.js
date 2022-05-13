@@ -9,6 +9,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Button, IconButton } from "@mui/material";
 import { SessionContext } from "../../context/sessionContext";
 import randomMessageApi from "../../services/random-message";
+import translateMessageApi from "../../services/message-translate";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,6 +48,7 @@ export default function VerticalTabs() {
   const [value, setValue] = React.useState(0);
   const { sessao, setSessao } = React.useContext(SessionContext);
   const [message, setMessage] = React.useState("");
+  const [traducao, setTraducao] = React.useState("");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -59,7 +61,7 @@ export default function VerticalTabs() {
       funcao: "",
       activeSession: false,
       token: "",
-      numeroMensagens: 0
+      numeroMensagens: 0,
     });
   };
 
@@ -68,6 +70,13 @@ export default function VerticalTabs() {
       try {
         const { data } = await randomMessageApi.get("/advice");
         setMessage(data.slip.advice);
+        const request = {
+          q: data.slip.advice,
+          target: "pt",
+          source: "en",
+        };
+        const res = await translateMessageApi.post("/translate", request);
+        setTraducao(res.data.translatedText);
         setSessao({ ...sessao, numeroMensagens: sessao.numeroMensagens + 1 });
       } catch {
         console.log("erro");
@@ -142,6 +151,9 @@ export default function VerticalTabs() {
           >
             <Typography variant="1" sx={{ marginBottom: "30px" }}>
               {message}
+            </Typography>
+            <Typography variant="1" sx={{ marginBottom: "30px" }}>
+              {traducao}
             </Typography>
             <Typography variant="subtitle1">
               Você leu {sessao.numeroMensagens} de 4 mensagens
