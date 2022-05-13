@@ -64,7 +64,6 @@ const Login = () => {
           password: values.password,
         };
         const { data } = await api.post("/session", request);
-        console.log(data);
         if (data.status === 1) {
           setSessao({
             ...sessao,

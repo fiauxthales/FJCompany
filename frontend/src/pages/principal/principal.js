@@ -6,10 +6,10 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Icon from "../../assets/images/logo";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { SessionContext } from "../../context/sessionContext";
-import randomMessageApi from "../../services/random-message";
-import translateMessageApi from "../../services/message-translate";
+import MensagemAleatoria from "./components/MensagemAleatoria";
+import GerenciarUsuarios from "./components/gerenciarUsuarios";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,8 +47,6 @@ function a11yProps(index) {
 export default function VerticalTabs() {
   const [value, setValue] = React.useState(0);
   const { sessao, setSessao } = React.useContext(SessionContext);
-  const [message, setMessage] = React.useState("");
-  const [traducao, setTraducao] = React.useState("");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -63,25 +61,6 @@ export default function VerticalTabs() {
       token: "",
       numeroMensagens: 0,
     });
-  };
-
-  const handleRequestMessage = async (event) => {
-    if (sessao.numeroMensagens <= 4) {
-      try {
-        const { data } = await randomMessageApi.get("/advice");
-        setMessage(data.slip.advice);
-        const request = {
-          q: data.slip.advice,
-          target: "pt",
-          source: "en",
-        };
-        const res = await translateMessageApi.post("/translate", request);
-        setTraducao(res.data.translatedText);
-        setSessao({ ...sessao, numeroMensagens: sessao.numeroMensagens + 1 });
-      } catch {
-        console.log("erro");
-      }
-    }
   };
 
   return (
@@ -138,28 +117,18 @@ export default function VerticalTabs() {
           sx={{ borderRight: 1, borderColor: "divider" }}
         >
           <Tab label="Mensagem Aleatória" {...a11yProps(0)} />
+          {sessao.funcao === "admnistrador" ? (
+            <Tab label="Gerenciar Usuários" {...a11yProps(1)} />
+          ) : null}
+          {sessao.funcao === "admnistrador" ? (
+            <Tab label="Gerenciar Equipes" {...a11yProps(2)} />
+          ) : null}
         </Tabs>
         <TabPanel value={value} index={0}>
-          <Box
-            sx={{
-              width: "80vw",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "Column",
-            }}
-          >
-            <Typography variant="1" sx={{ marginBottom: "30px" }}>
-              {message}
-            </Typography>
-            <Typography variant="1" sx={{ marginBottom: "30px" }}>
-              {traducao}
-            </Typography>
-            <Typography variant="subtitle1">
-              Você leu {sessao.numeroMensagens} de 4 mensagens
-            </Typography>
-            <Button onClick={handleRequestMessage}>Nova Mensagem</Button>
-          </Box>
+          <MensagemAleatoria />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <GerenciarUsuarios />
         </TabPanel>
       </Box>
     </Box>
